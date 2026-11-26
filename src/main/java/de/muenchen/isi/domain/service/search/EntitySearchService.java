@@ -124,7 +124,7 @@ public class EntitySearchService {
                     }
                 });
                 this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
-                this.createFilterAbfragenFuerAnwender(root, function);
+                this.createFilterAbfragenFuerAnwender(searchableEntities, root, function);
                 this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteWohneinheitenGesamtVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
@@ -255,18 +255,32 @@ public class EntitySearchService {
         final HashMap<String, List<?>> filterAttributeMap,
         final List<Class<? extends BaseEntity>> searchableEntities
     ) {
-        final var searchMapping = Search.mapping(entityManager.getEntityManagerFactory());
         filterAttributeMap.keySet().removeIf(fieldPath -> {
-            final boolean fieldKnown = searchableEntities
-                .stream()
-                .anyMatch(entity ->
-                    searchMapping.indexedEntity(entity).indexManager().descriptor().field(fieldPath).isPresent()
-                );
+            final boolean fieldKnown = this.isFieldKnownInSearchScope(fieldPath, searchableEntities);
             if (!fieldKnown) {
                 log.debug("Der Filter {} ist fuer den gewaehlten Suchscope nicht anwendbar.", fieldPath);
             }
             return !fieldKnown;
         });
+    }
+
+    /**
+     * Diese Methode prüft, ob das Indexfeld in mindestens einem Index der zu durchsuchenden Entitäten existiert.
+     *
+     * @param fieldPath der absolute Pfad des Indexfelds.
+     * @param searchableEntities die zu durchsuchenden Entitätsklassen.
+     * @return true, falls das Indexfeld in mindestens einem Index des Suchscopes existiert.
+     */
+    protected boolean isFieldKnownInSearchScope(
+        final String fieldPath,
+        final List<Class<? extends BaseEntity>> searchableEntities
+    ) {
+        final var searchMapping = Search.mapping(entityManager.getEntityManagerFactory());
+        return searchableEntities
+            .stream()
+            .anyMatch(entity ->
+                searchMapping.indexedEntity(entity).indexManager().descriptor().field(fieldPath).isPresent()
+            );
     }
 
     /**
@@ -305,14 +319,23 @@ public class EntitySearchService {
      * Die Einschränkung entspricht der Prüfung beim Laden einer Abfrage im {@code AbfrageService}. Vorhaben und
      * Infrastruktureinrichtungen besitzen keinen Abfragestatus und bleiben daher unverändert in den Suchergebnissen.
      *
+     * <p>
+     * Werden keine Abfragen durchsucht, existiert das Indexfeld des Abfragestatus in keinem Index des Suchscopes.
+     * Die Einschränkung entfällt dann, da Hibernate Search die Suche andernfalls mit HSEARCH000610 ablehnt.
+     *
+     * @param searchableEntities die zu durchsuchenden Entitätsklassen.
      * @param root Startknoten für die Suche (WHERE-Clause)
      * @param function Benutzerdefinierte Suchfunktion für die Ausführung
      */
     protected void createFilterAbfragenFuerAnwender(
+        final List<Class<? extends BaseEntity>> searchableEntities,
         final SimpleBooleanPredicateClausesCollector root,
         final SearchPredicateFactory function
     ) {
-        if (authenticationUtils.isOnlyRoleAnwender()) {
+        if (
+            authenticationUtils.isOnlyRoleAnwender() &&
+            this.isFieldKnownInSearchScope(INDEX_FIELD_STATUS_ABFRAGE, searchableEntities)
+        ) {
             root.add(
                 function.bool().filter(b -> {
                     var theBool = b.bool();

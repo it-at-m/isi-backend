@@ -77,7 +77,7 @@ class EntitySearchServiceTest {
         final var root = Mockito.mock(SimpleBooleanPredicateClausesCollector.class);
         final var function = Mockito.mock(SearchPredicateFactory.class);
 
-        service.createFilterAbfragenFuerAnwender(root, function);
+        service.createFilterAbfragenFuerAnwender(List.of(WeiteresVerfahren.class), root, function);
 
         Mockito.verifyNoInteractions(root, function);
     }

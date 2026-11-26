@@ -146,6 +146,26 @@ class SearchAnwenderIntegrationTest {
         assertThat(suche(suche), containsInAnyOrder("Abfrage erledigt mit"));
     }
 
+    /**
+     * Ohne Abfragen im Suchscope existiert das Indexfeld des Abfragestatus in keinem Index. Die Suche darf dann
+     * nicht mit HSEARCH000610 abbrechen.
+     */
+    @Test
+    void anwenderFindetOhneAbfragenVorhabenUndInfrastruktureinrichtungen() {
+        Mockito.doReturn(true).when(authenticationUtils).isOnlyRoleAnwender();
+        final var suche = createSucheAlleVorgaenge();
+        suche.setSelectWeiteresVerfahren(false);
+
+        assertThat(suche(suche), containsInAnyOrder("Vorhaben", "Kinderkrippe"));
+
+        suche.setSelectKinderkrippe(false);
+        assertThat(suche(suche), containsInAnyOrder("Vorhaben"));
+
+        suche.setSelectBauvorhaben(false);
+        suche.setSelectKinderkrippe(true);
+        assertThat(suche(suche), containsInAnyOrder("Kinderkrippe"));
+    }
+
     private List<String> sucheAlleVorgaenge() {
         return suche(createSucheAlleVorgaenge());
     }
