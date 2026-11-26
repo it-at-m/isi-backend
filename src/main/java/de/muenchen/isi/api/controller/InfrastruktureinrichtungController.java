@@ -11,7 +11,6 @@ import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.InfrastruktureinrichtungService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +20,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +50,11 @@ public class InfrastruktureinrichtungController {
     private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
+
+    public enum Rolle {
+        BEDARFSMELDUNG_KITA,
+        BEDARFSMELDUNG_SOZ,
+    }
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
@@ -142,14 +145,11 @@ public class InfrastruktureinrichtungController {
     public ResponseEntity<InfrastruktureinrichtungDto> createInfrastruktureinrichtungBedarfsmeldungKita(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException, ReportingException, InvalidTypeException {
-        if (
-            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() != InfrastruktureinrichtungTyp.KINDERKRIPPE &&
-            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() != InfrastruktureinrichtungTyp.KINDERGARTEN
-        ) {
-            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
-            log.error(message);
-            throw new InvalidTypeException(message);
-        }
+        CheckInfrastruktureinrichtungTyp(
+            Rolle.BEDARFSMELDUNG_KITA,
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp(),
+            null
+        );
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -188,14 +188,11 @@ public class InfrastruktureinrichtungController {
     public ResponseEntity<InfrastruktureinrichtungDto> createInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException, ReportingException, InvalidTypeException {
-        if (
-            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() !=
-            InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
-        ) {
-            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
-            log.error(message);
-            throw new InvalidTypeException(message);
-        }
+        CheckInfrastruktureinrichtungTyp(
+            Rolle.BEDARFSMELDUNG_SOZ,
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp(),
+            null
+        );
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -277,14 +274,11 @@ public class InfrastruktureinrichtungController {
     public ResponseEntity<InfrastruktureinrichtungDto> updateInfrastruktureinrichtungBedarfsmeldungKita(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException, ReportingException, InvalidTypeException {
-        if (
-            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() != InfrastruktureinrichtungTyp.KINDERKRIPPE &&
-            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() != InfrastruktureinrichtungTyp.KINDERGARTEN
-        ) {
-            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
-            log.error(message);
-            throw new InvalidTypeException(message);
-        }
+        CheckInfrastruktureinrichtungTyp(
+            Rolle.BEDARFSMELDUNG_KITA,
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp(),
+            null
+        );
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -328,14 +322,11 @@ public class InfrastruktureinrichtungController {
     public ResponseEntity<InfrastruktureinrichtungDto> updateInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException, ReportingException, InvalidTypeException {
-        if (
-            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() !=
-            InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
-        ) {
-            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
-            log.error(message);
-            throw new InvalidTypeException(message);
-        }
+        CheckInfrastruktureinrichtungTyp(
+            Rolle.BEDARFSMELDUNG_SOZ,
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp(),
+            null
+        );
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -398,22 +389,9 @@ public class InfrastruktureinrichtungController {
     public ResponseEntity<Void> deleteInfrastruktureinrichtungBedarfsmeldungKitaById(
         @PathVariable @NotNull final UUID id
     ) throws EntityNotFoundException, EntityIsReferencedException, InvalidTypeException {
-        final var typToDelete = this.infrastruktureinrichtungRepository
-            .findInfrastruktureinrichtungTypById(id)
-            .orElseThrow(() ->
-                new EntityNotFoundException("Keine Infrastruktureinrichtung mit der ID " + id + " gefunden.")
-            );
-        if (
-            typToDelete == InfrastruktureinrichtungTyp.KINDERKRIPPE ||
-            typToDelete == InfrastruktureinrichtungTyp.KINDERGARTEN
-        ) {
-            this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
-            log.error(message);
-            throw new InvalidTypeException(message);
-        }
+        CheckInfrastruktureinrichtungTyp(Rolle.BEDARFSMELDUNG_KITA, null, id);
+        this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/bedarfsmeldung_sozialplanung/{id}")
@@ -445,15 +423,33 @@ public class InfrastruktureinrichtungController {
     public ResponseEntity<Void> deleteInfrastruktureinrichtungBedarfsmeldungSozialplanungById(
         @PathVariable @NotNull final UUID id
     ) throws EntityNotFoundException, EntityIsReferencedException, InvalidTypeException {
-        final var typToDelete = this.infrastruktureinrichtungRepository
-            .findInfrastruktureinrichtungTypById(id)
-            .orElseThrow(() ->
-                new EntityNotFoundException("Keine Infrastruktureinrichtung mit der ID " + id + " gefunden.")
-            );
-        if (typToDelete == InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF) {
-            this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
-            return ResponseEntity.noContent().build();
-        } else {
+        CheckInfrastruktureinrichtungTyp(Rolle.BEDARFSMELDUNG_SOZ, null, id);
+        this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    public void CheckInfrastruktureinrichtungTyp(
+        Rolle rolle,
+        InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
+        UUID infrastruktureinrichtungId
+    ) throws EntityNotFoundException, InvalidTypeException {
+        final InfrastruktureinrichtungTyp typ =
+            infrastruktureinrichtungTyp != null
+                ? infrastruktureinrichtungTyp
+                : this.infrastruktureinrichtungRepository
+                      .findInfrastruktureinrichtungTypById(infrastruktureinrichtungId)
+                      .orElseThrow(() ->
+                          new EntityNotFoundException(
+                              "Keine Infrastruktureinrichtung mit der ID " + infrastruktureinrichtungId + " gefunden."
+                          )
+                      );
+        var valid = switch (rolle) {
+            case Rolle.BEDARFSMELDUNG_KITA -> typ == InfrastruktureinrichtungTyp.KINDERKRIPPE ||
+                typ == InfrastruktureinrichtungTyp.KINDERGARTEN;
+            case Rolle.BEDARFSMELDUNG_SOZ -> typ == InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF;
+            default -> true;
+        };
+        if (!valid) {
             final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
             log.error(message);
             throw new InvalidTypeException(message);

@@ -1,13 +1,16 @@
 package de.muenchen.isi.api.controller.common;
 
+import de.muenchen.isi.api.controller.InfrastruktureinrichtungController;
 import de.muenchen.isi.api.dto.common.KommentarBauvorhabenDto;
 import de.muenchen.isi.api.dto.common.KommentarInfrastruktureinrichtungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.InvalidTypeException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.common.KommentarService;
+import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,6 +49,8 @@ public class KommentarController {
     private final KommentarService kommentarService;
 
     private final KommentarApiMapper kommentarApiMapper;
+
+    private final InfrastruktureinrichtungController infrastruktureinrichtungController;
 
     @GetMapping("/all/bauvorhaben/{bauvorhabenId}")
     @Transactional(readOnly = true)
@@ -157,6 +162,11 @@ public class KommentarController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "412",
                 description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -168,10 +178,15 @@ public class KommentarController {
     )
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> createKommentarForInfrastruktureinrichtungBedarfsmeldungKita(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
-    ) throws EntityNotFoundException, OptimisticLockingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, InvalidTypeException {
         if (kommentarDto.getId() != null || kommentarDto.getInfrastruktureinrichtung() == null) {
             return ResponseEntity.badRequest().build();
         }
+        infrastruktureinrichtungController.CheckInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungController.Rolle.BEDARFSMELDUNG_KITA,
+            null,
+            kommentarDto.getInfrastruktureinrichtung()
+        );
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.saveKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -192,6 +207,11 @@ public class KommentarController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "412",
                 description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -203,10 +223,15 @@ public class KommentarController {
     )
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> createKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
-    ) throws EntityNotFoundException, OptimisticLockingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, InvalidTypeException {
         if (kommentarDto.getId() != null || kommentarDto.getInfrastruktureinrichtung() == null) {
             return ResponseEntity.badRequest().build();
         }
+        infrastruktureinrichtungController.CheckInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungController.Rolle.BEDARFSMELDUNG_SOZ,
+            null,
+            kommentarDto.getInfrastruktureinrichtung()
+        );
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.saveKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -311,6 +336,11 @@ public class KommentarController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Kommentar mit dieser ID nicht vorhanden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -327,7 +357,7 @@ public class KommentarController {
     )
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> updateKommentarForInfrastruktureinrichtungBedarfsmeldungKita(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
-    ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
+    ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, InvalidTypeException {
         final var savedKommentar = this.kommentarService.getKommentarEntityById(kommentarDto.getId());
         if (
             savedKommentar.getInfrastruktureinrichtung() == null ||
@@ -335,6 +365,11 @@ public class KommentarController {
         ) {
             return ResponseEntity.badRequest().build();
         }
+        infrastruktureinrichtungController.CheckInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungController.Rolle.BEDARFSMELDUNG_KITA,
+            savedKommentar.getInfrastruktureinrichtung().getInfrastruktureinrichtungTyp(),
+            null
+        );
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -355,6 +390,11 @@ public class KommentarController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Kommentar mit dieser ID nicht vorhanden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -371,7 +411,7 @@ public class KommentarController {
     )
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> updateKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
-    ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
+    ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, InvalidTypeException {
         final var savedKommentar = this.kommentarService.getKommentarEntityById(kommentarDto.getId());
         if (
             savedKommentar.getInfrastruktureinrichtung() == null ||
@@ -379,6 +419,11 @@ public class KommentarController {
         ) {
             return ResponseEntity.badRequest().build();
         }
+        infrastruktureinrichtungController.CheckInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungController.Rolle.BEDARFSMELDUNG_SOZ,
+            savedKommentar.getInfrastruktureinrichtung().getInfrastruktureinrichtungTyp(),
+            null
+        );
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -463,6 +508,11 @@ public class KommentarController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT FOUND -> Kommentar mit dieser ID nicht vorhanden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -474,13 +524,18 @@ public class KommentarController {
     )
     public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungKita(
         @PathVariable @NotNull final UUID id
-    ) throws EntityNotFoundException {
+    ) throws EntityNotFoundException, InvalidTypeException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
         if (kommentar.getInfrastruktureinrichtung() == null) {
             // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
             return ResponseEntity.badRequest().build();
         }
+        infrastruktureinrichtungController.CheckInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungController.Rolle.BEDARFSMELDUNG_KITA,
+            kommentar.getInfrastruktureinrichtung().getInfrastruktureinrichtungTyp(),
+            null
+        );
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }
@@ -499,6 +554,11 @@ public class KommentarController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT FOUND -> Kommentar mit dieser ID nicht vorhanden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -510,13 +570,18 @@ public class KommentarController {
     )
     public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @PathVariable @NotNull final UUID id
-    ) throws EntityNotFoundException {
+    ) throws EntityNotFoundException, InvalidTypeException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
         if (kommentar.getInfrastruktureinrichtung() == null) {
             // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
             return ResponseEntity.badRequest().build();
         }
+        infrastruktureinrichtungController.CheckInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungController.Rolle.BEDARFSMELDUNG_SOZ,
+            kommentar.getInfrastruktureinrichtung().getInfrastruktureinrichtungTyp(),
+            null
+        );
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }
