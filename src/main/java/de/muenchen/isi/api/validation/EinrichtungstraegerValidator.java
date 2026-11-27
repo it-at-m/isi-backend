@@ -7,7 +7,6 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.Infrastruktureinrichtung
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
-import de.muenchen.isi.api.dto.infrastruktureinrichtung.NachbarschaftstreffDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import jakarta.validation.ConstraintValidator;
@@ -120,7 +119,7 @@ public class EinrichtungstraegerValidator
      */
     public boolean isValidEinrichtungstraegerKinderkrippeKindergarten(final Einrichtungstraeger einrichtungstraeger) {
         return (
-            ObjectUtils.isNotEmpty(einrichtungstraeger) &&
+            einrichtungstraeger == null ||
             Einrichtungstraeger.getEinrichtungstraegerKinderkrippeKindergarten().contains(einrichtungstraeger)
         );
     }
