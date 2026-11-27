@@ -60,6 +60,7 @@ public class LookupService {
         model.setAnlassPlanung(this.getAnlassPlanung());
         model.setEinrichtungstraeger(this.getEinrichtungstraegerList());
         model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
+        model.setEinrichtungstraegerKinderkrippeKindergarten(this.getEinrichtungstraegerKinderkrippeKindergarten());
         model.setInfrastruktureinrichtungArt(this.getInfrastruktureinrichtungArtList());
         model.setInfrastruktureinrichtungTyp(this.getInfrastruktureinrichtungTypList());
         model.setArtGsNachmittagBetreuung(this.getArtGsNachmittagBetreuungList());
@@ -247,6 +248,15 @@ public class LookupService {
 
     private LookupListModel getEinrichtungstraegerSchuleList() {
         final List<LookupEntryModel> list = Einrichtungstraeger.getEinrichtungstraegerSchulen()
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getEinrichtungstraegerKinderkrippeKindergarten() {
+        final List<LookupEntryModel> list = Einrichtungstraeger.getEinrichtungstraegerKinderkrippeKindergarten()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());

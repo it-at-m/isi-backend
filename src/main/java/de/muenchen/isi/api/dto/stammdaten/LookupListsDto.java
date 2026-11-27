@@ -46,6 +46,8 @@ public class LookupListsDto {
 
     private LookupListDto einrichtungstraegerSchulen;
 
+    private LookupListDto einrichtungstraegerKinderkrippeKindergarten;
+
     private LookupListDto infrastruktureinrichtungTyp;
 
     private LookupListDto artGsNachmittagBetreuung;

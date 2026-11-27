@@ -111,10 +111,6 @@ public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
     @NotUnspecified
     private StatusInfrastruktureinrichtung status;
 
-    private BigDecimal flaecheGesamtgrundstueck;
-
-    private BigDecimal flaecheTeilgrundstueck;
-
     private String idKibigWeb;
 
     @NotNull

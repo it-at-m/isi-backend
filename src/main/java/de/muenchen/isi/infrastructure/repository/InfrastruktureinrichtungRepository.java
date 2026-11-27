@@ -5,8 +5,10 @@
 package de.muenchen.isi.infrastructure.repository;
 
 import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,4 +37,12 @@ public interface InfrastruktureinrichtungRepository extends JpaRepository<Infras
         "SELECT h FROM Infrastruktureinrichtung e JOIN e.bearbeitungshistorie h WHERE e.id = :id ORDER BY h.zeitpunkt ASC"
     )
     List<Bearbeitungshistorie> findBearbeitungshistorieById(@Param("id") final UUID id);
+
+    /**
+     * Ermittelt ausschließlich den Infrastruktureinrichtung Typ, ohne das komplette Objekt zu laden
+     *
+     * @param id der Infrastruktureinrichtung
+     * @return den Typ der Infrastruktureinrichtung oder ein leeres {@link Optional} falls die Infrastruktureinrichtung nicht existiert.
+     */
+    Optional<InfrastruktureinrichtungTyp> findInfrastruktureinrichtungTypById(UUID id);
 }

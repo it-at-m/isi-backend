@@ -7,7 +7,6 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.Infrastruktureinrichtung
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
-import de.muenchen.isi.api.dto.infrastruktureinrichtung.NachbarschaftstreffDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import jakarta.validation.ConstraintValidator;
@@ -36,6 +35,16 @@ public class EinrichtungstraegerValidator
     }
 
     private boolean einrichtungstraegerValid(final InfrastruktureinrichtungDto value) {
+        // Kinderkrippe and Kindergarten must always have a valid einrichtungstraeger regardless of status
+        if (value instanceof KinderkrippeDto dtoKk) {
+            var einrichtungstraeger = dtoKk.getEinrichtungstraeger();
+            return this.isValidEinrichtungstraegerKinderkrippeKindergarten(einrichtungstraeger);
+        }
+        if (value instanceof KindergartenDto dtoKg) {
+            var einrichtungstraeger = dtoKg.getEinrichtungstraeger();
+            return this.isValidEinrichtungstraegerKinderkrippeKindergarten(einrichtungstraeger);
+        }
+
         if (isStatusBestand(value)) {
             switch (value) {
                 case GrundschuleDto dto4 -> {
@@ -52,14 +61,6 @@ public class EinrichtungstraegerValidator
                 }
                 case HausFuerKinderDto dto1 -> {
                     var einrichtungstraeger = dto1.getEinrichtungstraeger();
-                    return this.isValidEinrichtungstraeger(einrichtungstraeger);
-                }
-                case KindergartenDto dto -> {
-                    var einrichtungstraeger = dto.getEinrichtungstraeger();
-                    return this.isValidEinrichtungstraeger(einrichtungstraeger);
-                }
-                case KinderkrippeDto dto -> {
-                    var einrichtungstraeger = dto.getEinrichtungstraeger();
                     return this.isValidEinrichtungstraeger(einrichtungstraeger);
                 }
                 default -> {
@@ -106,6 +107,20 @@ public class EinrichtungstraegerValidator
         return (
             ObjectUtils.isNotEmpty(einrichtungstraeger) &&
             Einrichtungstraeger.getEinrichtungstraeger().contains(einrichtungstraeger)
+        );
+    }
+
+    /**
+     * Überprüft, ob der gegebene {@link Einrichtungstraeger} gültig ist.
+     * Gültig bedeutet, dass der Einrichtungsträger in der Liste der Einrichtungsträger enthalten ist.
+     *
+     * @param einrichtungstraeger Der zu überprüfende {@link Einrichtungstraeger}.
+     * @return True, wenn der Einrichtungsträger gültig ist, ansonsten false.
+     */
+    public boolean isValidEinrichtungstraegerKinderkrippeKindergarten(final Einrichtungstraeger einrichtungstraeger) {
+        return (
+            einrichtungstraeger == null ||
+            Einrichtungstraeger.getEinrichtungstraegerKinderkrippeKindergarten().contains(einrichtungstraeger)
         );
     }
 }

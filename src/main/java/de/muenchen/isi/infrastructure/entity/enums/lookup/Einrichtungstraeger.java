@@ -45,4 +45,14 @@ public enum Einrichtungstraeger implements ILookup {
             STAATLICHE_EINRICHTUNG
         );
     }
+
+    public static List<Einrichtungstraeger> getEinrichtungstraegerKinderkrippeKindergarten() {
+        return List.of(
+            UNSPECIFIED,
+            STAEDTISCHE_EINRICHTUNG,
+            EINRICHTUNG_BETRIEBSTRAEGERSCHAFT,
+            FREIE_GEMEINNUETZIGE_SONSTIGE,
+            ELTERN_KIND_INITIATIVE
+        );
+    }
 }
