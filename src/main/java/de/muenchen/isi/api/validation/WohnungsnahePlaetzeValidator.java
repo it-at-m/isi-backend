@@ -3,7 +3,6 @@ package de.muenchen.isi.api.validation;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.GsNachmittagBetreuungDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.HausFuerKinderDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
-import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;

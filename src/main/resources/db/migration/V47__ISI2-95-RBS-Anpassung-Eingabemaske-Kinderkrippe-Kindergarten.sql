@@ -1,18 +1,11 @@
 BEGIN;
 
---
--- Infrastruktureinrichtung
---
-ALTER TABLE IF EXISTS isidbuser.infrastruktureinrichtung
-    DROP COLUMN IF EXISTS flaeche_gesamtgrundstueck,
-    DROP COLUMN IF EXISTS flaeche_teilgrundstueck;
---
 -- Kinderkrippe
---
 ALTER TABLE IF EXISTS isidbuser.kinderkrippe
     DROP COLUMN IF EXISTS anzahl_kinderkrippe_gruppen,
     DROP COLUMN IF EXISTS anzahl_kinderkrippe_plaetze,
     DROP COLUMN IF EXISTS wohnungsnahe_kinderkrippe_plaetze,
+
     ADD COLUMN fertigstellungsmonat integer,
     ADD COLUMN sobon_relevant varchar(255) not null DEFAULT 'UNSPECIFIED',
     ADD COLUMN muenchner_kitafoerderung boolean,
@@ -35,6 +28,7 @@ ALTER TABLE IF EXISTS isidbuser.kindergarten
     DROP COLUMN IF EXISTS anzahl_kindergarten_gruppen,
     DROP COLUMN IF EXISTS anzahl_kindergarten_plaetze,
     DROP COLUMN IF EXISTS wohnungsnahe_kindergarten_plaetze,
+
     ADD COLUMN sobon_relevant varchar(255) not null DEFAULT 'UNSPECIFIED',
     ADD COLUMN muenchner_kitafoerderung boolean,
     ADD COLUMN mini_kita boolean,
